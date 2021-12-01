@@ -25,7 +25,7 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
 
                 self.request.send(outdata.encode())
             except ConnectionResetError:
-                print(f"{peer_name} Connection reset by peer")
+                print(f"---- {peer_name} Connection reset by peer, exit thread ----")
                 break
             except BrokenPipeError:
                 print(f"---- {peer_name} Broken pipe, exit thread ----")
