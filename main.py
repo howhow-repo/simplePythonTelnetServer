@@ -27,7 +27,7 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
                 if indata == b'\xff\xf4\xff\xfd\x06'\
                         or indata.decode() == 'exit':  # ctrl+c or 'exit' make connection closed
                     self.request.close()
-                    logger.info('client closed connection.')
+                    logger.info(f'---- {peer_name}, client closed connection. ----')
                     break
 
                 logger.info(f'{peer_name} rev: {indata.decode()}')
