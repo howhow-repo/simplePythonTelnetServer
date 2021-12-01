@@ -23,12 +23,14 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
         while True:
             try:
                 indata = self.request.recv(1024).strip()
-                if indata == '\xff\xf4\xff\xfd\x06' or indata.decode() == 'exit':  # connection closed
+
+                if indata == b'\xff\xf4\xff\xfd\x06'\
+                        or indata.decode() == 'exit':  # ctrl+c or 'exit' make connection closed
                     self.request.close()
                     logger.info('client closed connection.')
                     break
-                logger.info(f'{peer_name} rev: {indata.decode()}')
 
+                logger.info(f'{peer_name} rev: {indata.decode()}')
                 outdata = self.output_template.format(resp=IndataHandler.echo(indata))
 
                 self.request.send(outdata.encode())
