@@ -17,8 +17,8 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
     def handle(self):
         cur = threading.current_thread()
         peer_name = self.request.getpeername()
-        logger.info(f'[{ctime()}] Client connected from {self.request.getpeername()} and [{cur.name}] is handling with him.')
-        self.request.send(str.encode("You can close thisd connection by ctrl+c or 'exit':\n"))
+        logger.info(f'[{ctime()}] Client connected from {self.request.getpeername()}; [{cur.name}] is handling.')
+        self.request.send(str.encode("You can close thisd connection by ctrl+c or 'exit':\n\n"))
         self.request.send(str.encode("<< sent: "))
         while True:
             try:
@@ -31,9 +31,9 @@ class ThreadedTCPRequestHandler(socketserver.BaseRequestHandler):
                     break
 
                 logger.info(f'{peer_name} rev: {indata.decode()}')
-                outdata = self.output_template.format(resp=IndataHandler.echo(indata))
-
+                outdata = self.output_template.format(resp=IndataHandler.reaction(indata))
                 self.request.send(outdata.encode())
+
             except ConnectionResetError:
                 logger.info(f"---- {peer_name} Connection reset by peer, exit thread ----")
                 break
